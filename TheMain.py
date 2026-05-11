@@ -1,10 +1,12 @@
 #This is for the main code and stuff
 #Menu options: view full data, visualisations, search for specific data, edit the data, exit
+
 #Imports
 import time
 import sys
 import subprocess
 import os
+
 #Functions
 def TheUI():
      print("Welcome to the data set!\n")
