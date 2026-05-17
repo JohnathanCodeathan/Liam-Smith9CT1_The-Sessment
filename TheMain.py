@@ -6,12 +6,15 @@ import time
 import sys
 import subprocess
 import os
-
+import pandas as pt
+import matplotlib.pyplot as plt
+import numpy as np
+from TheModule import setup, fulldata, visdata
 #Functions
 def TheUI():
      print("Welcome to the data set!\n")
      time.sleep(3)
-     print("This data set will prove that it is harder to achieve financial security today compared to the past!")
+     print("This data set will prove that it is harder to survive on minimum wage compared to the past!")
      time.sleep(1)     
      while True:
          try:
@@ -31,12 +34,14 @@ def TheUI():
              time.sleep(2)
              print("Please?")
          if bigchoice == 1:
-             print("You have chosen to viwew the data in its full!")
+             print("\n \n You have chosen to view the data in its full!")
+             time.sleep(2)
+             fulldata()             
              #GO MY PANDAS
-             pass
          elif bigchoice == 2:
              print("You have chosen to visualise the data in a chart!")
-             #GO MY MATPLOTLIB
+             time.sleep(2)
+             visdata()
          elif bigchoice == 3:
              print("You have chosen to search for the data!")
              #GO MY ELABORATE FILTER FUNCTION
@@ -60,4 +65,5 @@ def TheUI():
 
 
 #Things that will actually be used
+setup()
 TheUI()
