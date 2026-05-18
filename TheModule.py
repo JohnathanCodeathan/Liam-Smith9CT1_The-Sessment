@@ -142,8 +142,16 @@ def visdata():
                       if vchoice > 2026 or vchoice < 2000:
                             print("ERROR: You did not enter a year within the acceptable range of 2000-2026, please try again.")
                       else:
-                            rowhead = vchoice-2000
-                            plt.bar(theconomy[:, ["minin_$", "groceries_$", "house_$", "electricity_$", "water_$", "costtot_$", "savtot_$", "todminin_$", "todcostot_$", "todsavtot_$"]], theconomy[str(rowhead), :], color= "green")
+                            yearlyearlyson = theconomy.loc(vchoice, "minin_$")
+                            plt.bar(yearlyearlyson, 0.35, label= "Minimum Wage")
+                            yearlyearlyson = theconomy.loc(vchoice, "groceries_$")
+                            plt.bar(yearlyearlyson, 0.35, label= "Average Groceries")
+                            yearlyearlyson = theconomy.loc(vchoice, "house_$")
+                            plt.bar(yearlyearlyson, 0.35, label= "Average Rent")
+                            yearlyearlyson = theconomy.loc(vchoice, "electricity_$")
+                            plt.bar(yearlyearlyson, 0.35, label= "Average Electricity Bill")
+                            yearlyearlyson = theconomy.loc(vchoice, "water_$")
+                            plt.bar(yearlyearlyson, 0.35, label= "Average Water Bill" )
                             plt.show()
                             break
 
