@@ -20,7 +20,7 @@ def fulldata():
 def visdata():
     print("\nHow would you like your data to be visualised? Press: ")
     time.sleep(1)
-    print(" 1. To view the data in a line graph to view a certain value over time\n 2. To view the statistics of a certain year in a bar graph \n 3. To view the data in a scatter plot.\n Or 4. to view the data in a pie chart.")
+    print(" 1. To view the data in a line graph to view a certain value over time\n Or 2. To view the minimum wage and expenses of each year in a scatter plot.\n")
     time.sleep(1)
     while True:
         try:
@@ -136,23 +136,95 @@ def visdata():
                time.sleep(1)
                while True:
                       try:
-                            vchoice = int(input("Which year would you like to visualise statistics for? Enter any year from 2000-2026: "))
-                      except: 
-                             print("ERROR: You did not enter a year, or even a number at all. ")
-                      if vchoice > 2026 or vchoice < 2000:
-                            print("ERROR: You did not enter a year within the acceptable range of 2000-2026, please try again.")
+                             vchoice = int(input("Would you like to adjust the numbers for inflation? Press 1 if yes, and 0 if no: "))
+                      except:
+                             print("ERROR: You didn't enter a number")
+                      if vchoice == 1:
+                             theconomy.plot(
+                                    kind='scatter',
+                                    x='todminin_$',
+                                    y='todcostot_$',
+                                    color='green',
+                                    alpha=0.3,
+                                    title='Correlation of Weekly Expenses and Minimum Wage (But Inflation)'
+                                    )
+                             plt.show()
+                             break
+                      elif vchoice == 0:       
+                             theconomy.plot(
+                                    kind='scatter',
+                                    x='minin_$',
+                                    y='costtot_$',
+                                    color='green',
+                                    alpha=0.3,
+                                    title='Correlation of Weekly Expenses and Minimum Wage'
+                                    )
+                             plt.show()
+                             break
                       else:
-                            yearlyearlyson = theconomy.loc(vchoice, "minin_$")
-                            plt.bar(yearlyearlyson, 0.35, label= "Minimum Wage")
-                            yearlyearlyson = theconomy.loc(vchoice, "groceries_$")
-                            plt.bar(yearlyearlyson, 0.35, label= "Average Groceries")
-                            yearlyearlyson = theconomy.loc(vchoice, "house_$")
-                            plt.bar(yearlyearlyson, 0.35, label= "Average Rent")
-                            yearlyearlyson = theconomy.loc(vchoice, "electricity_$")
-                            plt.bar(yearlyearlyson, 0.35, label= "Average Electricity Bill")
-                            yearlyearlyson = theconomy.loc(vchoice, "water_$")
-                            plt.bar(yearlyearlyson, 0.35, label= "Average Water Bill" )
-                            plt.show()
-                            break
+                             print("ERROR: You didn't enter a 1 or 0. Do that next time.")
+               break
+        else:
+               print("ERROR: Please enter either 1 or 2")
 
-     #Dont forget the break that goes here
+#Editing the data
+def edata():
+       global theconomy
+       while True:
+              print("How would you like to edit the data? Press: ")
+              time.sleep(1)
+              print(" 1. To add a new row/year to the file \n 2. To remove a row from the file \n Or 3. To edit a specific cell")    
+              try:
+                     echoice = int(input("Enter your choice here: "))
+              except:
+                     print("ERROR: You did not enter a number. ")
+              if echoice == 1:
+                     while True:
+                             print("You have chosen to add a new row! ")
+                             time.sleep(1)
+                             templist = []                             
+                             try:
+                                    tempvar = int(input("Enter the year the new row will be for: "))
+                                    templist.append(tempvar)
+                                    try:
+                                           tempvar = float(input("Enter the minimum wage for that year (with a decimal): "))
+                                           templist.append(tempvar)
+                                           tempvar = float(input("Enter the average weekly groceries shop for that year (with a decimal): "))
+                                           templist.append(tempvar)
+                                           tempvar = float(input("Enter the average weekly rent for that year (with a decimal): "))
+                                           templist.append(tempvar)
+                                           tempvar = float(input("Enter the average weekly electricity bill for that year (with a decimal): "))
+                                           templist.append(tempvar)
+                                           tempvar = float(input("Enter the average weekly water bill for that year (with a decimal): "))
+                                           templist.append(tempvar) 
+                                           templist.append(templist[2]+templist[3]+templist[4]+templist[5])       
+                                           templist.append(templist[1]-templist[6])   
+                                           tempvar = float(input(f"Enter the minimum wage of {templist[1]} for that year but accounted for inflation (with a decimal): "))
+                                           templist.append(tempvar)
+                                           tempvar = float(input(f"Enter the total costs of {templist[6]} for that year but accounted for inflation (with a decimal): "))
+                                           templist.append(tempvar)
+                                           templist.append(templist[8]-templist[9])
+                                           theconomy.loc[len(theconomy)-1] = templist
+                                           print(theconomy)
+                                           break                              
+                                    except:
+                                           print("ERROR: You didn't enter a number with a decimal place")       
+                             except:
+                                    print("ERROR: You did not enter a year.")
+                             
+                             
+                     break
+              elif echoice == 2:
+                     while True:
+                            print("You have chosen to remove a row!")
+                            print(f"Here are the list of years you can delete: \n{theconomy["year"]}")   
+                            time.sleep(3)                         
+                            try:
+                                   echoice = int(input("Enter which year's row you would like to delete: "))
+                                   tempvar = theconomy.loc[echoice]
+                                   theconomy = theconomy.drop(tempvar)
+                                   break
+                            except:
+                                   print("ERROR: You did not enter a year!")
+                                   time.sleep(1)
+                     break

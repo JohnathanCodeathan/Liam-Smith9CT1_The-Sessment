@@ -9,7 +9,7 @@ import os
 import pandas as pt
 import matplotlib.pyplot as plt
 import numpy as np
-from TheModule import setup, fulldata, visdata
+from TheModule import setup, fulldata, visdata, edata
 #Functions
 def TheUI():
      print("Welcome to the data set!\n")
@@ -47,7 +47,8 @@ def TheUI():
              #GO MY ELABORATE FILTER FUNCTION
          elif bigchoice == 4:
              print("You have chosen to edit the data!")
-             #GO MY EDITING PROGRAM!
+             time.sleep(2)
+             edata()
          elif bigchoice == 5:
              print("Saving changes...")
              time.sleep(3)
