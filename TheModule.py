@@ -4,6 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import time
 import numpy as np
+#Lists/variables
+rowname = ["year","minin_$","groceries_$","house_$","electricity_$","water_$","costtot_$","savtot_$","todminin_$","todcostot_$","todsav_$"]
 #Functions
 
 #Set up
@@ -11,6 +13,7 @@ def setup():
     global theconomy
     theconomy = pd.read_csv('TheData.csv')
     theconomy.index.name = "RowNum"
+
 #Viewing full data
 def fulldata():
     print(theconomy)
@@ -205,7 +208,7 @@ def edata():
                                            templist.append(tempvar)
                                            templist.append(templist[8]-templist[9])
                                            theconomy.loc[len(theconomy)-1] = templist
-                                           print(theconomy)
+                                           print("You should probably save your changes!")
                                            break                              
                                     except:
                                            print("ERROR: You didn't enter a number with a decimal place")       
@@ -221,10 +224,78 @@ def edata():
                             time.sleep(3)                         
                             try:
                                    echoice = int(input("Enter which year's row you would like to delete: "))
-                                   tempvar = theconomy.loc[echoice]
-                                   theconomy = theconomy.drop(tempvar)
                                    break
                             except:
                                    print("ERROR: You did not enter a year!")
                                    time.sleep(1)
+                            if echoice in theconomy["year"]:
+                                    print("ERROR: You didn't enter a year in the acceptable range! ")
+                     tempvar = theconomy.index[theconomy["year"] == echoice]
+                     theconomy.drop(index=theconomy.index[tempvar], inplace= True)
+                     time.sleep(1)
+                     print(f"Here is your data after the change: \n {theconomy}")       
+                     print("You should probably save your changes! ")
                      break
+              elif echoice == 3:
+                     while True:
+                            print("You have chosen to edit a specific cell! ")
+                            try:
+                                   echoice = int(input("Enter which years row you would like to edit: "))
+                                   break
+                            except:
+                                   print("ERROR: You didn't enter a number! ")
+                     if echoice in theconomy["year"]:
+                      print("ERROR: You did not enter a number within the acceptable range!")
+                     while True:
+                            tempvar = str(input("Enter the column header of the row you would like to edit: ")).lower()
+                            if tempvar in rowname:
+                                   break
+                            else:
+                                   print("ERROR: You did not enter a recognised column name! ")
+                     while True:
+                            try:
+                                   ochoice = float(input("Please enter the value you would like to replace that cell with (include a decimal): "))
+                                   break
+                            except:
+                                   print("ERROR: You didn't enter a number with a decimal!")
+                     echoice = theconomy.index[theconomy["year"] == echoice]
+                     theconomy.loc[echoice, tempvar] = ochoice
+                     print(f"Here is the new dataset: \n{theconomy}")
+                     break
+              else:
+                     print("ERROR: You did not enter a valid choice! ")
+
+#Saving the data
+def save():
+       theconomy.tocsv("TheData.csv")
+       print("Changes saved!")
+
+#Filtering the data
+def filter():
+       while True:
+              print("How would you like to get the specifc data? Press: ")
+              time.sleep(1)
+              print(" 1. To hide data depending on certain characteristics \n 2. To rearrange the data \n Or 3. To group the years by certain traits. ")
+              try:
+                     fchoice = int(input("Enter your choice as a number here: "))
+              except:
+                     print("ERROR: You didn't enter a number")
+              if fchoice < 1 or fchoice > 3:
+                     print("ERROR: You didn't enter a number within the acceptable range! ")
+              else:
+                     break
+       if fchoice == 1:
+              print("You have chosen to filter the data!")
+              time.sleep(1)
+              while True:
+                      print("Enter: ")
+       elif fchoice == 2:
+              print("You have chosen to rearrange the data! ")
+              time.sleep(1)
+              while True:
+                      print("Enter: ")
+       elif fchoice == 3:
+              print("You have chosen to group the data! ")
+              time.sleep(1)
+              while True:
+                      print("Enter: ")

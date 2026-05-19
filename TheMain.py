@@ -9,7 +9,7 @@ import os
 import pandas as pt
 import matplotlib.pyplot as plt
 import numpy as np
-from TheModule import setup, fulldata, visdata, edata
+from TheModule import setup, fulldata, visdata, edata, save
 #Functions
 def TheUI():
      print("Welcome to the data set!\n")
@@ -51,8 +51,9 @@ def TheUI():
              edata()
          elif bigchoice == 5:
              print("Saving changes...")
-             time.sleep(3)
+             time.sleep(2)
              #GO MY SINGLE LINE SAVING PROGRAM
+             save()
          elif bigchoice == 6:
              print("Exiting program...")
              time.sleep(3)
