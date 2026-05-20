@@ -6,10 +6,10 @@ import time
 import sys
 import subprocess
 import os
-import pandas as pt
+import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from TheModule import setup, fulldata, visdata, edata, save
+from TheModule import setup, fulldata, visdata, edata, save, filter
 #Functions
 def TheUI():
      print("Welcome to the data set!\n")
@@ -45,6 +45,7 @@ def TheUI():
          elif bigchoice == 3:
              print("You have chosen to search for the data!")
              #GO MY ELABORATE FILTER FUNCTION
+             filter()
          elif bigchoice == 4:
              print("You have chosen to edit the data!")
              time.sleep(2)
@@ -55,6 +56,25 @@ def TheUI():
              #GO MY SINGLE LINE SAVING PROGRAM
              save()
          elif bigchoice == 6:
+             theconomy2 = pd.read_csv("TheData.csv")
+             if theconomy.reset_index(drop= True).equals(theconomy2):
+                 print("You have unsaved changes that you should save!")
+                 while True:
+                     try:
+                         smolchoice = int(input("Would you like to save? Press 1 if yes, press 2 if no. \n Enter your choice: "))
+                     except:
+                         print("ERROR: You didn't enter a number!")
+                     if smolchoice == 2:
+                         print("If you insist, it's your loss.")
+                         break
+                     elif smolchoice == 1:
+                         print("Saving Changes...")
+                         time.sleep(3)
+                         theconomy.tocsv("TheData.csv", index=False)
+                         print("Changes saved!")
+                         break
+                     else:
+                         print("ERROR: You didn't enter a 1 or a 2. ")
              print("Exiting program...")
              time.sleep(3)
              break
@@ -68,4 +88,5 @@ def TheUI():
 
 #Things that will actually be used
 setup()
+from TheModule import theconomy 
 TheUI()

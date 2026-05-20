@@ -234,7 +234,6 @@ def edata():
                      theconomy.drop(index=theconomy.index[tempvar], inplace= True)
                      time.sleep(1)
                      print(f"Here is your data after the change: \n {theconomy}")       
-                     print("You should probably save your changes! ")
                      break
               elif echoice == 3:
                      while True:
@@ -265,13 +264,15 @@ def edata():
               else:
                      print("ERROR: You did not enter a valid choice! ")
 
+
 #Saving the data
 def save():
-       theconomy.tocsv("TheData.csv")
+       theconomy.tocsv("TheData.csv", index=False)
        print("Changes saved!")
 
 #Filtering the data
 def filter():
+       global theconomy
        while True:
               print("How would you like to get the specifc data? Press: ")
               time.sleep(1)
@@ -288,14 +289,243 @@ def filter():
               print("You have chosen to filter the data!")
               time.sleep(1)
               while True:
-                      print("Enter: ")
+                      print("Enter: \n 1. To filter rows \n Or 2. To filter by columns.")
+                      try:
+                             tempvar = int(input("Enter your choice here: "))
+                      except: 
+                             print("ERROR: You didn't enter a number!")
+                      if tempvar < 3 and tempvar > 0:
+                             break
+                      else: 
+                             print("ERROR: You didn't enter a choice within the acceptable range! ")  
+              if tempvar == 1:
+                     print("You have chosen to filter rows!")
+                     time.sleep(1)
+              elif tempvar ==2:
+                     print("You have chosen to filter columns!")
+                     time.sleep(1)                    
        elif fchoice == 2:
               print("You have chosen to rearrange the data! ")
               time.sleep(1)
               while True:
-                      print("Enter: ")
+                      while True:
+                             print("Enter: \n 1. To rearrange by row \n Or 2. To sort by collumn")
+                             try:
+                                    fchoice = int(input("Enter your choice here: "))
+                             except: 
+                                    print("ERROR: You didn't enter a number!")
+                             if fchoice < 3 and fchoice > 0:
+                                    break
+                             else: 
+                                    print("ERROR: You didn't enter a choice within the acceptable range! ")
+                      if fchoice == 1:
+                             print("You have chosen to sort by row! ")
+                             time.sleep(1)
+                             while True:
+                                    print("Pick a number from 1-11 which will represent which column you will sort the rows by, with 1 being year, and 11 being todsav_$. ")
+                                    try:
+                                           fchoice = int(input("Enter your choice here: "))
+                                    except: 
+                                           print("ERROR: You didn't enter a number!")
+                                    if fchoice < 12 and fchoice > 0:
+                                           break
+                                    else: 
+                                           print("ERROR: You didn't enter a choice within the acceptable range! ")
+                                    fchoice = fchoice -1
+                             while True:
+                                    print("Enter: \n 1. To arrange your rows by lowest value to highest value \n 2. To arrange your rows by highest value to lowest value \n Or 3. To set them to default")
+                                    try:
+                                           tempvar = int(input("Enter your choice here: "))
+                                    except: 
+                                           print("ERROR: You didn't enter a number!")
+                                    if tempvar < 4 and tempvar > 0:
+                                           break
+                                    else: 
+                                           print("ERROR: You didn't enter a choice within the acceptable range! ")                                
+                             if tempvar == 1:
+                                    theconomy.sort_values(by=theconomy.columns[fchoice], inplace=True)
+                                    print(f"Here is the sorted dataframe: \n \n{theconomy}")
+                             elif tempvar == 2:
+                                    theconomy.sort_values(by= theconomy.columns[fchoice], ascending=False, inplace=True)
+                                    print(f"Here is the sorted dataframe: \n \n{theconomy}")
+                             elif tempvar ==3:
+                                    theconomy.sort_values(by=theconomy.columns["year"], inplace=True)
+                                    print(f"Here is the sorted dataframe: \n\n {theconomy}")
+                      elif fchoice == 2:
+                             print("You have chosen to sort by column! ")
+                             time.sleep(1)
+                             theconomy3 = pd.DataFrame()
+                             templist = []
+                             for i in range(11):
+                                    while True:
+                                           print(f"Columns already placed: {templist}")
+                                           try:
+                                                  tempvar = int(input(f"Pick a number from 1-11 which will represent which column you want at {i+1}th , with 1 being year, and 11 being todsav_$. ")) -1
+                                           except:
+                                                  print("ERROR: You didn't enter an acceptable number!")
+                                           else:
+                                                  if theconomy.columns[tempvar] in theconomy3:
+                                                         print("That column is already there! ")
+                                                  else:
+                                                         break
+                                    templist.append(tempvar+1)
+                                    theconomy3[theconomy.columns[tempvar]] = theconomy.iloc[:,tempvar]
+                             theconomy = pd.DataFrame(theconomy3)
+                             print(f"Here is the sorted dataframe: \n\n {theconomy}")
+                             time.sleep(1)
+                             break
        elif fchoice == 3:
-              print("You have chosen to group the data! ")
-              time.sleep(1)
-              while True:
-                      print("Enter: ")
+        print("You have chosen to group the data! ")
+        time.sleep(1)
+        while True:
+               print("Press: \n 1. To get a frequency distribution table of a certain column \n or 2. Get the average/range/standard deviation of a standard column ")
+               try:
+                      tempvar = int(input("Enter your choice here: "))
+               except:
+                      print("ERROR: You didn't enter a number!")
+               if tempvar != 1 and tempvar != 2:
+                      print("ERROR: You didn't enter a 1 or a 2!")
+               else:
+                      break
+        if tempvar == 1:
+               print("You have chosen to see a frequency distribution table of a certain column!")
+               time.sleep(1)
+               while True:
+                      echoice = str(input("Enter the column you want to do a table on: "))
+                      if echoice.lower() in theconomy.columns:
+                             break
+                      else:
+                             print("ERROR: You didnt enter a column name that exists!")
+               if echoice.lower() == "year":
+                      print("You have chosen to do a frequency distribution table on the year!")  
+                      time.sleep(1)
+                      print(f'Frequency Distribution table of {echoice}')       
+                      print(f"2000>: {(theconomy['year']<2000).sum()}") 
+                      print(f"2000-2004: {((theconomy['year']>1999) & (theconomy['year']<2005)).sum()}")
+                      print(f"2005-2009: {((theconomy['year']>2004) & (theconomy['year']<2010)).sum()}")   
+                      print(f"2010-2014: {((theconomy['year']>2009) & (theconomy['year']<2015)).sum()}")
+                      print(f"2015-2019: {((theconomy['year']>2014) & (theconomy['year']<2020)).sum()}")
+                      print(f"2020-2024: {((theconomy['year']>2019) & (theconomy['year']<2025)).sum()}")
+                      print(f"2025+: {(theconomy['year']>2024).sum()}")
+               elif echoice.lower() == "minin_$":
+                      print("You have chosen to do a frequency distribution table on the minimum wage!")  
+                      time.sleep(1)
+                      print(f'Frequency Distribution table of {echoice}')       
+                      print(f"400>: {(theconomy['minin_$']<400).sum()}") 
+                      print(f"400-499: {((theconomy['minin_$']>399) & (theconomy['minin_$']<500)).sum()}")
+                      print(f"500-599: {((theconomy['minin_$']>499) & (theconomy['minin_$']<600)).sum()}")   
+                      print(f"600-699: {((theconomy['minin_$']>599) & (theconomy['minin_$']<700)).sum()}")
+                      print(f"700-799: {((theconomy['minin_$']>699) & (theconomy['minin_$']<800)).sum()}")
+                      print(f"800-899: {((theconomy['minin_$']>799) & (theconomy['minin_$']<900)).sum()}")
+                      print(f"900+: {(theconomy['minin_$']>899).sum()}")
+               elif echoice.lower() == "groceries_$":
+                      print("You have chosen to do a frequency distribution table on the weekly grocery price!")  
+                      time.sleep(1)
+                      print(f'Frequency Distribution table of {echoice}')       
+                      print(f"40>: {(theconomy['groceries_$']<40).sum()}") 
+                      print(f"40-49: {((theconomy['groceries_$']>39) & (theconomy['groceries_$']<50)).sum()}")
+                      print(f"50-59: {((theconomy['groceries_$']>49) & (theconomy['groceries_$']<60)).sum()}")   
+                      print(f"60-69: {((theconomy['groceries_$']>59) & (theconomy['groceries_$']<70)).sum()}")
+                      print(f"70-79: {((theconomy['groceries_$']>69) & (theconomy['groceries_$']<80)).sum()}")
+                      print(f"80-89: {((theconomy['groceries_$']>79) & (theconomy['groceries_$']<90)).sum()}")
+                      print(f"90+: {(theconomy['groceries_$']>89).sum()}")
+               elif echoice.lower() == "house_$":
+                      print("You have chosen to do a frequency distribution table on the weekly rent price!")  
+                      time.sleep(1)
+                      print(f'Frequency Distribution table of {echoice}')       
+                      print(f"200>: {(theconomy['house_$']<200).sum()}") 
+                      print(f"200-299: {((theconomy['house_$']>199) & (theconomy['house_$']<300)).sum()}")
+                      print(f"300-399: {((theconomy['house_$']>299) & (theconomy['house_$']<400)).sum()}")   
+                      print(f"400-499: {((theconomy['house_$']>399) & (theconomy['house_$']<500)).sum()}")
+                      print(f"500-599: {((theconomy['house_$']>499) & (theconomy['house_$']<600)).sum()}")
+                      print(f"600-699: {((theconomy['house_$']>599) & (theconomy['house_$']<700)).sum()}")
+                      print(f"700+: {(theconomy['house_$']>699).sum()}")
+               elif echoice.lower() == "electricity_$":
+                      print("You have chosen to do a frequency distribution table on the weekly electricity price!")  
+                      time.sleep(1)
+                      print(f'Frequency Distribution table of {echoice}')       
+                      print(f"5>: {(theconomy['electricity_$']<5).sum()}") 
+                      print(f"5-9: {((theconomy['electricity_$']>4) & (theconomy['electricity_$']<10)).sum()}")
+                      print(f"10-14: {((theconomy['electricity_$']>9) & (theconomy['electricity_$']<15)).sum()}")   
+                      print(f"15-19: {((theconomy['electricity_$']>14) & (theconomy['electricity_$']<20)).sum()}")
+                      print(f"20+: {(theconomy['electricity_$']>19).sum()}")
+               elif echoice.lower() == "water_$":
+                      print("You have chosen to do a frequency distribution table on the weekly water price!")  
+                      time.sleep(1)
+                      print(f'Frequency Distribution table of {echoice}')       
+                      print(f"1>: {(theconomy['water_$']<1).sum()}") 
+                      print(f"1-1.99: {((theconomy['water_$']>0.99) & (theconomy['water_$']<2)).sum()}")
+                      print(f"2-2.99: {((theconomy['water_$']>1.99) & (theconomy['water_$']<3)).sum()}")   
+                      print(f"3-3.99: {((theconomy['water_$']>2.99) & (theconomy['water_$']<4)).sum()}")
+                      print(f"4-4.99: {((theconomy['water_$']>3.99) & (theconomy['water_$']<5)).sum()}")
+                      print(f"5+: {(theconomy['water_$']>4.99).sum()}")  
+               elif echoice.lower() == "costtot_$":
+                      print("You have chosen to do a frequency distribution table on the total weekly expenses!")  
+                      time.sleep(1)
+                      print(f'Frequency Distribution table of {echoice}')       
+                      print(f"200>: {(theconomy['costtot_$']<200).sum()}") 
+                      print(f"200-299: {((theconomy['costtot_$']>199) & (theconomy['costtot_$']<300)).sum()}")
+                      print(f"300-399: {((theconomy['costtot_$']>299) & (theconomy['costtot_$']<400)).sum()}")   
+                      print(f"400-499: {((theconomy['costtot_$']>399) & (theconomy['costtot_$']<500)).sum()}")
+                      print(f"500-599: {((theconomy['costtot_$']>499) & (theconomy['costtot_$']<600)).sum()}")
+                      print(f"600-699: {((theconomy['costtot_$']>599) & (theconomy['costtot_$']<700)).sum()}")
+                      print(f"700+: {(theconomy['costtot_$']>699).sum()}")    
+               elif echoice.lower() == "savtot_$":
+                      print("You have chosen to do a frequency distribution table on the total weekly savings!")  
+                      time.sleep(1)
+                      print(f'Frequency Distribution table of {echoice}')       
+                      print(f"100>: {(theconomy['savtot_$']<100).sum()}") 
+                      print(f"100-139: {((theconomy['savtot_$']>99) & (theconomy['savtot_$']<140)).sum()}")
+                      print(f"140-179: {((theconomy['savtot_$']>139) & (theconomy['savtot_$']<180)).sum()}")   
+                      print(f"180-219: {((theconomy['savtot_$']>179) & (theconomy['savtot_$']<220)).sum()}")
+                      print(f"220-259: {((theconomy['savtot_$']>219) & (theconomy['savtot_$']<260)).sum()}")
+                      print(f"260-299: {((theconomy['savtot_$']>259) & (theconomy['savtot_$']<300)).sum()}")
+                      print(f"300+: {(theconomy['savtot_$']>299).sum()}")           
+               elif echoice.lower() == "todminin_$":
+                      print("You have chosen to do a frequency distribution table on the minimum wage (adjusted for inflation) !")  
+                      time.sleep(1)
+                      print(f'Frequency Distribution table of {echoice}')       
+                      print(f"750>: {(theconomy['todminin_$']<750).sum()}") 
+                      print(f"750-799: {((theconomy['todminin_$']>749) & (theconomy['todminin_$']<800)).sum()}")   
+                      print(f"800-849: {((theconomy['todminin_$']>799) & (theconomy['todminin_$']<850)).sum()}")
+                      print(f"850-899: {((theconomy['todminin_$']>849) & (theconomy['todminin_$']<900)).sum()}")
+                      print(f"900-949: {((theconomy['todminin_$']>899) & (theconomy['todminin_$']<950)).sum()}")
+                      print(f"950-999: {((theconomy['todminin_$']>949) & (theconomy['todminin_$']<1000)).sum()}")
+                      print(f"1000+: {(theconomy['todminin_$']>999).sum()}")     
+               elif echoice.lower() == "todcostot_$":
+                      print("You have chosen to do a frequency distribution table on the minimum wage (adjusted for inflation) !")  
+                      time.sleep(1)
+                      print(f'Frequency Distribution table of {echoice}')       
+                      print(f"500>: {(theconomy['todcostot_$']<500).sum()}") 
+                      print(f"500-549: {((theconomy['todcostot_$']>499) & (theconomy['todcostot_$']<550)).sum()}")   
+                      print(f"550-599: {((theconomy['todcostot_$']>549) & (theconomy['todcostot_$']<649)).sum()}")
+                      print(f"600-649: {((theconomy['todcostot_$']>599) & (theconomy['todcostot_$']<650)).sum()}")
+                      print(f"650-699: {((theconomy['todcostot_$']>649) & (theconomy['todcostot_$']<700)).sum()}")
+                      print(f"700-749: {((theconomy['todcostot_$']>699) & (theconomy['todcostot_$']<750)).sum()}")
+                      print(f"750-799: {((theconomy['todcostot_$']>749) & (theconomy['todcostot_$']<800)).sum()}")
+                      print(f"800+: {(theconomy['todcostot_$']>799).sum()}")     
+               elif echoice.lower() == "todsav_$":
+                      print("You have chosen to do a frequency distribution table on the minimum wage (adjusted for inflation) !")  
+                      time.sleep(1)
+                      print(f'Frequency Distribution table of {echoice}')       
+                      print(f"100>: {(theconomy['todsav_$']<100).sum()}") 
+                      print(f"100-149: {((theconomy['todsav_$']>99) & (theconomy['todsav_$']<150)).sum()}")   
+                      print(f"150-199: {((theconomy['todsav_$']>149) & (theconomy['todsav_$']<200)).sum()}")
+                      print(f"200-249: {((theconomy['todsav_$']>199) & (theconomy['todsav_$']<250)).sum()}")
+                      print(f"250-299: {((theconomy['todsav_$']>249) & (theconomy['todsav_$']<300)).sum()}")
+                      print(f"300+: {(theconomy['todsav_$']>299).sum()}")    
+        elif tempvar == 2:
+               print("You have chosen to see the average, range, and standard deviation of a certain column! ")
+               time.sleep(1)
+               while True:
+                      echoice = str(input("Enter the column you want to do the average/range/standard deviation on: "))
+                      if echoice.lower() in theconomy.columns:
+                             break
+                      else:
+                             print("ERROR: You didnt enter a column name that exists!") 
+               print(f"You have chosen to see the average/range/standard deviation of {echoice}!")
+               print(f"Mean: {(theconomy[echoice].sum())/len(theconomy)}")
+               print(f"Median: {theconomy[echoice].median()}") 
+               print(f"Mode: {theconomy[echoice].mode()}")   
+               print(f"Range: {(theconomy[echoice].max())-(theconomy[echoice].min())}")
+               print(f"Standard Deviation: {theconomy[echoice].std()}")                        
