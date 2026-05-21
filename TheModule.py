@@ -301,6 +301,20 @@ def filter():
               if tempvar == 1:
                      print("You have chosen to filter rows!")
                      time.sleep(1)
+                     while True:
+                      print("Enter: \n 1. To search for a keyword \n Or 2. To only show the rows of your choice")
+                      try:
+                             echoice = int(input("Enter your choice here: "))
+                      except: 
+                             print("ERROR: You didn't enter a number!")
+                      if echoice < 3 and echoice > 0:
+                             break
+                      else: 
+                             print("ERROR: You didn't enter a choice within the acceptable range! ")                              
+                     if echoice == 1:
+                            while True:
+                                   fchoice = str(input("Enter the word/number you would like to search for: "))
+                                   print(f"")
               elif tempvar ==2:
                      print("You have chosen to filter columns!")
                      time.sleep(1)                    
