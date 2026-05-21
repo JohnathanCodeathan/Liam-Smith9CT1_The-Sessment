@@ -312,9 +312,13 @@ def filter():
                       else: 
                              print("ERROR: You didn't enter a choice within the acceptable range! ")                              
                      if echoice == 1:
-                            while True:
-                                   fchoice = str(input("Enter the word/number you would like to search for: "))
-                                   print(f"")
+                            fchoice = str(input("Enter the word/number you would like to search for: "))       
+                            if fchoice in theconomy.values():
+                             for i in range (len(theconomy)):
+                                    if fchoice in theconomy.iloc[i, :]:
+                                           print(theconomy.iloc[i,:])
+                            else:
+                             print("No results found. ")
               elif tempvar ==2:
                      print("You have chosen to filter columns!")
                      time.sleep(1)                    
