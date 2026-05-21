@@ -11,6 +11,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from TheModule import setup, fulldata, visdata, edata, save, filter
 #Functions
+def disclaimer():
+    print("Disclaimer: Please read the readme first. It's called a READ ME for a reason, for you to read. \nIf you don't know anything about this program, check there, it'll have some helpful things, like a video game manual!")
+    print("Now wait 5 seconds while you let that sink in. ")
+    time.sleep(5)
 def TheUI():
      print("Welcome to the data set!\n")
      time.sleep(3)
@@ -87,6 +91,7 @@ def TheUI():
 
 
 #Things that will actually be used
+disclaimer()
 setup()
 from TheModule import theconomy 
 TheUI()

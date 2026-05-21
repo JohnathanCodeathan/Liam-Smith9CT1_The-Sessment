@@ -313,15 +313,86 @@ def filter():
                              print("ERROR: You didn't enter a choice within the acceptable range! ")                              
                      if echoice == 1:
                             fchoice = str(input("Enter the word/number you would like to search for: "))       
-                            if fchoice in theconomy.values():
-                             for i in range (len(theconomy)):
-                                    if fchoice in theconomy.iloc[i, :]:
-                                           print(theconomy.iloc[i,:])
+                            theconomy4 = theconomy[theconomy.astype(str).apply(lambda smolconomy: smolconomy.str.contains(fchoice)).any(axis=1)]
+                            if theconomy4.empty:
+                                   print("ERROR: Match not found")
+                                   time.sleep(2)
                             else:
-                             print("No results found. ")
+                             print(theconomy4)
+                             time.sleep(2)
+                     elif echoice == 2:
+                            print("You have chosen to choose which rows to hide!")
+                            time.sleep(1)
+                            therows = []
+                            while True:
+                             try:
+                                    fchoice = int(input("Enter how many rows you want to see here: "))
+
+                             except: 
+                                    print("ERROR: You didn't enter a number!")
+                             if fchoice < len(theconomy) and fchoice > 0:
+                                    break
+                             else: 
+                                    print("ERROR: You didn't enter a choice within the acceptable range! ")
+                            for i in range (fchoice):
+                                   while True:
+                                          try:
+                                                 echoice = int(input("Enter the year of the row here: "))
+                                          except: 
+                                                 print("ERROR: You didn't enter a number!")
+                                          if echoice in theconomy["year"].values:
+                                                 break
+                                          else: 
+                                                 print("ERROR: You didn't enter a year that is in the dataframe!")
+                                   therows.append(theconomy[theconomy["year"] == echoice])
+                            theconomy5 = pd.concat(therows).drop_duplicates()
+                            print(f"Here is your filtered dataframe: \n\n {theconomy5}")                               
               elif tempvar ==2:
                      print("You have chosen to filter columns!")
-                     time.sleep(1)                    
+                     time.sleep(1)  
+                     while True:
+                      print("Enter: \n 1. To search for a keyword \n Or 2. To only show the columns of your choice")
+                      try:
+                             echoice = int(input("Enter your choice here: "))
+                      except: 
+                             print("ERROR: You didn't enter a number!")
+                      if echoice < 3 and echoice > 0:
+                             break
+                      else: 
+                             print("ERROR: You didn't enter a choice within the acceptable range! ")                              
+                     if echoice == 1:
+                            fchoice = str(input("Enter the word/number you would like to search for: "))       
+                            theconomy4 = theconomy.astype(str).apply(lambda smolconomy: smolconomy.str.contains(fchoice, regex= False)).any()
+                            if theconomy4.empty:
+                                   print("ERROR: Match not found")
+                                   time.sleep(2)
+                            else:
+                             theconomy5 = theconomy.loc[:, theconomy4]
+                             print(theconomy5)
+                             time.sleep(2)
+                     elif echoice == 2:
+                            print("You have chosen to choose which columns to hide!")
+                            time.sleep(1)
+                            thecolumns = []
+                            while True:
+                             try:
+                                    fchoice = int(input("Enter how many columns you want to see here: "))
+                                    if fchoice < len(theconomy.columns) and fchoice > 0:
+                                           break
+                                    else: 
+                                           print("ERROR: You didn't enter a choice within the acceptable range! ")                                    
+                             except: 
+                                    print("ERROR: You didn't enter a number!")
+                            for i in range (fchoice):
+                                   while True:
+                                          echoice = str(input("Enter the name of the column here: ")) 
+                                          if echoice in theconomy.columns:
+                                                 break
+                                          else: 
+                                                 print("ERROR: You didn't enter a column name that is in the dataframe!")
+                                   thecolumns.append(echoice)
+                            theconomy5 = theconomy[thecolumns]
+                            print(f"Here is your filtered dataframe: \n\n {theconomy5}")                   
        elif fchoice == 2:
               print("You have chosen to rearrange the data! ")
               time.sleep(1)
